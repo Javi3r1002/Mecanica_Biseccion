@@ -1,0 +1,71 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import newton
+import math
+from math import e
+
+k = 0.322660005
+V = (2.82)*np.sin(math.radians(45))
+g = 9.8
+U = (2.82)*np.cos(math.radians(45))
+Y = []
+X = []
+fig = plt.figure()
+ax = plt.subplot(111)
+
+def bisection(f,a,b,N):
+	if f(a)*f(b) >= 0:
+		print('NoOOo')
+		return(None)
+	a_n = a
+	b_n = b
+	for n in range(1, N+1):
+		m_n = (a_n + b_n)/2
+		f_m_n = f(m_n)
+		if f(a_n)*f_m_n < 0:
+			a_n = a_n
+			b_n = m_n
+		elif f(b_n)*f_m_n < 0:
+			a_n = m_n
+			b_n = b_n
+		elif f_m_n == 0:
+			print('Tiempo de vuelo',  m_n)
+			return(m_n)
+		else:
+			print('NoOOoO X2')
+			return None
+	print((a_n+b_n)/2)
+	return((a_n+b_n)/2)
+
+
+
+
+
+
+
+
+a = .01
+b = 10
+f = lambda x: -((g*x)/(k))+((k*V+g)/(k**2))*(1-e**(-k*x))
+aprox = bisection(f, a,b , 1000)
+print(f(a), f(b))
+R = lambda t: (U/k)*(1-e**(-k*t))
+H = lambda t: -((g*t)/(k))+((k*V+g)/(k**2))*(1-e**(-k*t))
+
+print(aprox)
+POS = np.linspace(0, aprox)
+
+for i in POS:
+	X.append(R(i))
+	Y.append(H(i))
+
+print('Desplazamiento', max(X))
+print('Altura Máxima', max(Y))
+
+plt.xlabel('Posición en X (m)')
+plt.ylabel('Posición en y (m)')
+ax.plot(X,Y)
+plt.show()
+
+
+
